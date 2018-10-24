@@ -1,0 +1,51 @@
+---
+
+- name: "[WORDPRESS] - check if exist"
+  stat: 
+    path: "/var/www/html/wordpress/"
+  register: check_wordpress
+
+- name: "[WORDPRESS] - download tar.gz"
+  unarchive:
+    src: "{{ wordpress_source }}"
+    dest: "/var/www/html/"
+    remote_src: yes
+  when: check_wordpress.stat.exists == False
+
+- name: "[WORDPRESS] - index.html"
+  file: 
+    path: "/var/www/html/index.html"
+    state: absent
+
+- name: "[WORDPRESS] - exist wp-config-sample.php"
+  stat:
+    path: "/var/www/html/wordpress/wp-config-sample.php"
+  register: check_sample
+
+- name: "[WORDPRESS] - rename wp-config-sample.php"
+  command: mv /var/www/html/wordpress/wp-config-sample.php /var/www/html/wordpress/wp-config.php 
+  when: check_sample.stat.exists == True
+
+- name: "[WORDPRESS] - config wp-config.php"
+  lineinfile:
+    dest: "/var/www/html/wordpress/wp-config.php"
+    regexp: "{{ item.search }}"
+    line: "{{ item.new }}"
+    backrefs: yes
+  with_items:
+    - {'search': '^(.*)database_name_here(.*)$', 'new': '\1{{ mysql_db }}\2'}
+    - {'search': '^(.*)username_here(.*)$', 'new': '\1{{ mysql_user }}\2'}
+    - {'search': '^(.*)password_here(.*)$', 'new': '\1{{ mysql_password }}\2'}
+
+
+
+
+
+
+ 
+
+
+
+
+
+ 

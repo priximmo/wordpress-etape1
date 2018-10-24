@@ -1,0 +1,7 @@
+---
+- name: "[XAVKI]"
+  hosts: all
+
+  roles:
+    - wordpress
+   

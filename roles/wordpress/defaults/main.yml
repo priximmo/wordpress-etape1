@@ -1,0 +1,20 @@
+---
+
+# packages for lamp
+package_name:
+    - apache2
+    - mysql-server
+    - php7.0-common
+    - php7.0-mysql
+    - libapache2-mod-php7.0
+    - python-mysqldb
+    - wget
+
+# variables for mysql
+mysql_db: "wordpress"
+mysql_user: "user1"
+mysql_password: "a123456"
+
+# wordpress
+
+wordpress_source: "https://wordpress.org/latest.tar.gz"
